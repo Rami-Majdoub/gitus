@@ -23,7 +23,7 @@ Help(){
 }
 
 send(){
-    if true; then
+    if false; then
       git init
       git branch -M main
       git remote add origin git@github.com:Rami-Majdoub/gitus.git
