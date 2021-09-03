@@ -1,11 +1,5 @@
 #!/bin/bash
 
-# declare repo=$0
-# echo $repo
-
-# declare g=$(git status)
-# echo $g
-
 ############################################################
 # Help                                                     #
 ############################################################
@@ -23,19 +17,24 @@ Help(){
 }
 
 send(){
-    if false; then
-      git init
-      git branch -M main
-      git remote add origin git@github.com:Rami-Majdoub/gitus.git
+  # search for .git repo
+  is_new_repo=$(ls -a | grep "\.git" | wc -l)
 
-      git add -A
-      git commit -m "first commit"
-      git push -u origin main
-    else
-      git add -A
-      git commit -m "update"
-      git push
-    fi
+  if [ $is_new_repo = 0 ]; then
+    repo_name=$(basename "$PWD")
+
+    git init
+    git branch -M main
+    git remote add origin git@github.com:Rami-Majdoub/$repo_name.git
+
+    git add -A
+    git commit -m "first commit"
+    git push -u origin main
+  else
+    git add -A
+    git commit -m "update"
+    git push
+  fi
 }
 
 recieve(){
