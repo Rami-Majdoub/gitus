@@ -5,14 +5,14 @@
 ############################################################
 Help(){
    # Display Help
-   echo "Add description of the script functions here."
+   echo "gitus is git but simpler."
    echo
-   echo "gitus send|recieve|s|r [-option]"
+   echo "gitus ([-m "commit message"] -s)|(-r)"
    echo "options:"
    echo "h          Print this Help."
-   echo "s|send     Send your changes to the cloud."
-   echo "    [-m "message"] add a commit message, default is \"Update\"."
-   echo "r|recieve  Recieve the changes from the cloud."
+   echo "m          Add a commit message, default is \"Update\"."
+   echo "s          Send your changes to the cloud."
+   echo "r          Receive changes from the cloud."
    echo
 }
 
@@ -52,11 +52,11 @@ do
         m) msg=${OPTARG}
            ;;
 
-        s) echo send
+        s) echo Sending your changes to the cloud.
            send
            ;;
 
-        r) echo recieve
+        r) echo Receiving changes from the cloud.
            recieve
            ;;
 
@@ -64,15 +64,3 @@ do
            exit;;
     esac
 done
-
-case $1 in
-  send | s)
-#    echo send
-#    send
-    ;;
-
-  recieve | r)
-#    echo recieve
-#    recieve
-    ;;
-esac
