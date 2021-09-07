@@ -7,13 +7,30 @@ Help(){
 	# Display Help
 	echo "gitus is git but simpler."
 	echo
-	echo "gitus ([-m "commit message"] -s)|(-r)"
+	echo "gitus ([-m \"commit message\"] -s)|(-r)"
 	echo "options:"
 	echo "h          Print this Help."
 	echo "m          Add a commit message, default is \"Update\"."
 	echo "s          Send your changes to the cloud."
 	echo "r          Receive changes from the cloud."
 	echo
+}
+
+CheckSSH(){
+	if [ ! -f "~/.ssh/id_rsa" ] ; then
+		email=$(git config --global --get "user.email")
+		if [ -z "$email" ]; then
+			read -p "[gitus] what is you're email? " email
+		fi
+
+		echo "[gitus] Generating SSH Key"
+		ssh-keygen -t rsa -b 4096 -C "$email"
+		eval "$(ssh-agent -s)"
+		ssh-add ~/.ssh/id_rsa
+
+		echo "[gitus] Please add the SSH key to your account before proceeding. For more information"
+		echo "[gitus] GitHub: https://docs.github.com/en/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account"
+	fi
 }
 
 Init(){
@@ -25,7 +42,7 @@ Init(){
 		tmp=$(git config --global --get "$var")
 		if [ -z "$tmp" ]; then
 			if [ $git_vars_not_set_msg_shown = false ]; then
-				echo "Oh no! you haven't set git global variables yet. Let's do that"
+				echo "[gitus] Oh no! you haven't set git global variables yet. Let's do that"
 
 				git_vars_not_set_msg_shown=true
 			fi
@@ -35,8 +52,8 @@ Init(){
 		fi
 	}
 
-	CheckVar "user.name" "what is you're user name? "
-	CheckVar "user.email" "what is you're email? "
+	CheckVar "user.name" "[gitus] what is you're user name? "
+	CheckVar "user.email" "[gitus] what is you're email? "
 }
 
 Send(){
@@ -45,6 +62,7 @@ Send(){
 
 	if [ $has_git_repo = 0 ]; then
 		Init
+		CheckSSH
 		repo_name="$(basename "$PWD")"
 		user_name="$(git config --global --get user.name)"
 
@@ -80,11 +98,11 @@ do
 		m) msg=${OPTARG}
 		;;
 
-		s) echo Sending your changes to the cloud.
+		s) echo "[gitus] Sending your changes to the cloud."
 		Send
 		;;
 
-		r) echo Receiving changes from the cloud.
+		r) echo "[gitus] Receiving changes from the cloud."
 		Recieve
 		;;
 
