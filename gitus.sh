@@ -17,17 +17,26 @@ Help(){
 }
 
 Init(){
-	user_name=$(git config --global --get user.name)
-	if [ -z "$user_name" ]; then
-		echo "Oh no! you haven't set git global variables yet"
-		echo "Let's do that"
+	git_vars_not_set_msg_shown=false
 
-		read -p "what is you're user name? " user_name
-		read -p "what is you're email? " email
+	CheckVar(){
+		var=$1
+		message=$2
+		tmp=$(git config --global --get "$var")
+		if [ -z "$tmp" ]; then
+			if [ $git_vars_not_set_msg_shown = false ]; then
+				echo "Oh no! you haven't set git global variables yet. Let's do that"
 
-		git config --global --add user.name "$user_name"
-		git config --global --add user.email "$email"
-	fi
+				git_vars_not_set_msg_shown=true
+			fi
+
+			read -p "$message" tmp
+			git config --global --add "$var" "$tmp"
+		fi
+	}
+
+	CheckVar "user.name" "what is you're user name? "
+	CheckVar "user.email" "what is you're email? "
 }
 
 Send(){
