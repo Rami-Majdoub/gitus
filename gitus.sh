@@ -32,6 +32,35 @@ Init(){
 
 Send(){
 	# search for .git repo
+	has_git_repo=$( ls -a | grep "^.git/" | wc -l )
+
+	if [ $has_git_repo = 0 ]; then
+		Init
+		repo_name="$(basename "$PWD")"
+		user_name="$(git config --global --get user.name)"
+
+		git init
+		git branch -M main
+		git remote add origin git@github.com:"$user_name"/"$repo_name".git
+		
+		if [ -z "$msg" ]; then
+			msg="first commit"
+		fi
+	fi
+	if [ -z "$msg" ]; then
+		msg="Update"
+	fi
+	git add -A
+	git commit -m "$msg"
+
+	remote="$(git remote show)"
+	current_branch="$(git branch --show-current)"
+	git push -u "$remote" "$current_branch"
+
+}
+
+Send(){
+	# search for .git repo
 	has_git_repo=$(ls -a | grep "^.git/" | wc -l)
 
 	if [ $has_git_repo = 0 ]; then
