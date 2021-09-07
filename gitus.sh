@@ -16,11 +16,26 @@ Help(){
 	echo
 }
 
-send(){
+Init(){
+	user_name=$(git config --global --get user.name)
+	if [ -z "$user_name" ]; then
+		echo "Oh no! you haven't set git global variables yet"
+		echo "Let's do that"
+
+		read -p "what is you're user name? " user_name
+		read -p "what is you're email? " email
+
+		git config --global --add user.name "$user_name"
+		git config --global --add user.email "$email"
+	fi
+}
+
+Send(){
 	# search for .git repo
 	has_git_repo=$(ls -a | grep "^.git/" | wc -l)
 
 	if [ $has_git_repo = 0 ]; then
+		Init
 		repo_name="$(basename "$PWD")"
 		user_name="$(git config --global --get user.name)"
 
@@ -43,7 +58,7 @@ send(){
 	git push -u "$remote" "$current_branch"
 }
 
-recieve(){
+Recieve(){
 	git pull
 }
 
@@ -57,11 +72,11 @@ do
 		;;
 
 		s) echo Sending your changes to the cloud.
-		send
+		Send
 		;;
 
 		r) echo Receiving changes from the cloud.
-		recieve
+		Recieve
 		;;
 
 		\?) # Invalid option
