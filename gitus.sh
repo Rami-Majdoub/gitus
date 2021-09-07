@@ -18,31 +18,35 @@ Help(){
 
 send(){
   # search for .git repo
-  is_new_repo=$(ls -a | grep "\.git" | wc -l)
+  has_git_repo=$(ls -a | grep "^.git/" | wc -l)
 
-  if [ $is_new_repo = 0 ]; then
-    repo_name=$(basename "$PWD")
-    user_name=$(git config --global --get user.name)
+  if [ $has_git_repo = 0 ]; then
+    repo_name="$(basename "$PWD")"
+    user_name="$(git config --global --get user.name)"
 
     git init
     git branch -M main
-    git remote add origin git@github.com:$user_name/$repo_name.git
-
-    git add -A
-    git commit -m "first commit"
-    git push -u origin main
-  else
-    git add -A
-    git commit -m "$msg"
-    git push
+    git remote add origin git@github.com:"$user_name"/"$repo_name".git
+    if [ -z "$msg" ]; then
+      msg="first commit"
+    fi
   fi
+  if [ -z "$msg" ]; then
+    msg="Update"
+  fi
+
+  git add -A
+  git commit -m "$msg"
+
+  remote="$(git remote show)"
+  current_branch="$(git branch --show-current)"
+  git push -u "$remote" "$current_branch"
 }
 
 recieve(){
   git pull
 }
 
-msg="update"
 while getopts "hm:sr" flag;
 do
     case "${flag}" in
