@@ -21,7 +21,8 @@ path_contains_dir=$(cat ~/.profile | grep $PWD | wc -l)
 if [ $path_contains_dir -eq 0 ]; then
 	echo "Adding this directory to PATH"
 	beginEdit
-	echo "export PATH=\"$PATH:$PWD\"" >> ~/.profile
+	echo $PATH
+	echo "export PATH=\"\$PATH:$PWD\"" >> ~/.profile
 fi
 
 # gitus.sh > gitus
