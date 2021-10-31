@@ -2,34 +2,37 @@
 
 chmod +x ./gitus.sh
 
-started_edit=false
-beginEdit(){
-	if [ $started_edit = false ]; then
-		echo "##### Begin of gitus edit #####" >> ~/.profile
-		started_edit=true
-	fi
-}
+# ~/.bashrc
+##### Begin of gitus edit #####
+# if [ -d "$PWD" ] ; then
+# 	PATH="$PATH:$PWD"
+# fi
+##### End of gitus edit #####
 
-endEdit(){
-	if [ $started_edit = true ]; then
-		echo "##### End of gitus edit #####" >> ~/.profile
-	fi
-}
+# ~/.bash_aliases
+#alias gitus=gitus.sh
+
 
 # add gitus directory to PATH
-path_contains_dir=$(cat ~/.profile | grep $PWD | wc -l)
+file=~/.bash_profile
+path_contains_dir=$(cat $file | grep "PATH=\"\$PATH:\$PWD\"" | wc -l)
 if [ $path_contains_dir -eq 0 ]; then
 	echo "Adding this directory to PATH"
-	beginEdit
-	echo "export PATH=\"\$PATH:$PWD\"" >> ~/.profile
+	
+	echo "" >> "$file"
+	echo "##### Begin of gitus edit #####" >> "$file"
+	echo "if [ -d "$PWD" ] ; then" >> "$file"
+	echo "  export PATH=\"\$PATH:$PWD\"" >> "$file"
+	echo "fi" >> "$file"
+	echo "##### End of gitus edit #####" >> "$file"
 fi
 
 # gitus.sh > gitus
-alias_exists=$(cat ~/.profile | grep "alias gitus=gitus.sh" | wc -l)
+file=~/.bash_aliases
+alias_exists=$(cat $file | grep "alias gitus=gitus.sh" | wc -l)
 if [ $alias_exists -eq 0 ]; then
 	echo "Creating alias"
-	beginEdit
-	echo alias gitus=gitus.sh >> ~/.profile
+	
+	echo "alias gitus=gitus.sh" >> "$file"
 fi
 
-endEdit
