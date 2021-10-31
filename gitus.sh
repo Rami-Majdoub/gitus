@@ -58,7 +58,7 @@ Init(){
 
 Send(){
 	# search for .git repo
-	has_git_repo=$( ls -a | grep "^.git" | wc -l )
+	has_git_repo=$( ls -ap | egrep "^\.git/$" | wc -l )
 
 	if [ $has_git_repo = 0 ]; then
 		Init
