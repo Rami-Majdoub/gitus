@@ -17,7 +17,7 @@ Help(){
 }
 
 CheckSSH(){
-	if [ ! -f "~/.ssh/id_rsa" ] ; then
+	if [ ! -f ~/.ssh/id_rsa ] ; then
 		email=$(git config --global --get "user.email")
 		if [ -z "$email" ]; then
 			read -p "[gitus] what is you're email? " email
