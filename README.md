@@ -1,6 +1,7 @@
 # gitus
 gitus is Git but simpler.
 
+Language: English, [Français](./README-fr.md)
 ## Installation
 1- Open Git bash (right click -> Git Bash Here)
 
