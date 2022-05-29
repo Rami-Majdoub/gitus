@@ -22,6 +22,7 @@ Langue: [English](./README.md), Français
 	chmod +x ./install.sh
 	./install.sh
 	source ~/.bashrc
+	source ~/.bash_aliases
 
 6- Vérifiez si cela fonctionne
 
