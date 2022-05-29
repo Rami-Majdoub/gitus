@@ -7,7 +7,7 @@ Help(){
 	# Display Help
 	echo "gitus is git but simpler."
 	echo
-	echo "gitus ([-m \"commit message\"] -s) | -r | -(h|l|u)"
+	echo "gitus ([-m \"commit message\"] -s) | -r [repo_url] | -(h|l|u)"
 	echo "options:"
 	echo "h          Print this Help."
 	echo "m          Add a commit message, default is \"Update\"."
@@ -104,46 +104,48 @@ Send(){
 	Run git push -u "$remote" "$current_branch"
 }
 
-###
-# fixme: pull is not working
-# getopts ignores -r when it doesn't have value
-###
-Recieve(){
-	# echo "url: $clone_url"
+Receive(){
 	if [ -z "$clone_url" ]; then
-		Run git pull # didn't made it to this line !
+		Run git pull
 	else
 		Run git clone "$clone_url"
 	fi
 }
 
-while getopts ":r:hm:slu" flag;
+while getopts "rhm:slu" flag;
 do
 	case "${flag}" in
 		h) Help
-		exit;;
+			exit
+		;;
 
 		m) msg=${OPTARG}
 		;;
 
 		s) echo "[gitus] Sending your changes to the cloud."
-		Send
+			Send
 		;;
 
 		r) echo "[gitus] Receiving changes from the cloud."
-		clone_url=${OPTARG}
-		Recieve
+			eval nextopt=\${$OPTIND}
+			# echo "$nextopt"
+			# https://stackoverflow.com/questions/11517139/optional-option-argument-with-getopts
+			if [[ -n $nextopt && $nextopt != -* ]] ; then
+	      OPTIND=$((OPTIND + 1))
+			fi
+			clone_url=${nextopt}
+			Receive
 		;;
 
 		l)
-		d=$(git config --bool --default true gitus.debug)
-		if [[ "$d" = true ]]; then
-			echo "[gitus] Learning mode is not active"
-			git config --global "gitus.debug" false
-		else
-			echo "[gitus] Learning mode is active"
-			git config --global "gitus.debug" true
-		fi
+			d=$(git config --bool --default true gitus.debug)
+			if [[ "$d" = true ]]; then
+				echo "[gitus] Learning mode is not active"
+				git config --global "gitus.debug" false
+			else
+				echo "[gitus] Learning mode is active"
+				git config --global "gitus.debug" true
+			fi
 		;;
 
 		u)

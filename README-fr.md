@@ -32,6 +32,7 @@ Langue: [English](./README.md), Français
 Recevez les modifications depuis le cloud (GitHub).
 
 	gitus -r
+	# gitus -r git@github.com:githubteacher/merge-conflicts.git
 
 Envoyez vos modifications vers le cloud (GitHub).
 
