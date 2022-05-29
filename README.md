@@ -21,8 +21,9 @@ Language: English, [Français](./README-fr.md)
 
 	chmod +x ./install.sh
 	./install.sh
+	source ~/.bashrc
 
-6- Open **another** window of Git Bash **(if you don't this won't work)** and check if it works
+6- Check if it works
 
 	gitus -h
 

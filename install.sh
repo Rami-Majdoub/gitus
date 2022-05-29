@@ -14,7 +14,7 @@ chmod +x ./gitus.sh
 
 
 # add gitus directory to PATH
-file=~/.bash_profile
+file=~/.bashrc
 path_contains_dir=$(cat $file | grep "PATH=\"\$PATH:$PWD\"" | wc -l)
 if [ $path_contains_dir -eq 0 ]; then
 	echo "Adding this directory to PATH"
