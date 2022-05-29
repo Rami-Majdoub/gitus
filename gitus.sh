@@ -94,7 +94,10 @@ Send(){
 		msg="Update"
 	fi
 	Run git add -A
-	Run git commit -m "\"$msg\"" # outer quotes needed for Run(), inner quotes for Run.echo
+  # fixme:
+	echo "[gitus] $ git commit -m \"$msg\""
+	git commit -m "$msg"
+
 	if [[ $had_no_remote = true ]]; then
 		Run git branch -M main # needed only one time after first commit
 	fi
